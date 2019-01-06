@@ -21,10 +21,10 @@ function main(sources: Sources) {
       map((ev: SelfEvent) => ev.target.checked),
       startWith(false),
       map(toggled =>
-        div([
-          input({attrs: {type: 'checkbox'}}), 'Toggle me',
-          p(toggled ? 'ON' : 'off')
-        ])
+        <div>
+          <label><input attrs={{ id: 'he', type: 'checkbox', checked: toggled}}/> Toggle me</label>
+          <p style={{ color: 'red', fontWeight: 'bold' }}>{toggled ? 'ON' : 'OFF'}</p>
+        </div>
       )
     )
   }

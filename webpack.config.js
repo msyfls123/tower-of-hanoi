@@ -1,5 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+
+
 module.exports = {
   mode: 'development',
   entry: [
@@ -20,13 +23,24 @@ module.exports = {
         path.resolve(__dirname, 'node_modules'),
         path.resolve(__dirname, 'bower_components')
       ],
-      loader: 'ts-loader',
+      use: [
+        {
+          loader: 'babel-loader',
+        },
+        { loader: 'ts-loader' },
+      ]
     }]
   },
   resolve: {
     extensions: ['.json', '.js', '.ts', '.tsx', '.css']
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      // https://godbasin.github.io/2017/09/03/cyclejs-notes-3-use-typescript/
+      'SnabbdomCreateElement': ['snabbdom-pragma', 'createElement']
+    })
+  ],
   devtool: 'source-map',
   devServer: {
     publicPath: path.join('/dist/'),
