@@ -6,7 +6,6 @@ const webpack = require('webpack')
 module.exports = {
   mode: 'development',
   entry: [
-    'webpack/hot/dev-server',
     path.join(__dirname, 'src', 'app')
   ],
   output: {

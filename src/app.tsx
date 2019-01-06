@@ -1,24 +1,28 @@
+import { Observable } from 'rxjs'
 import { map, startWith } from 'rxjs/operators'
 import { run } from '@cycle/rxjs-run'
-import { makeDOMDriver, div, input, p } from '@cycle/dom'
-import { DOMSource } from '@cycle/dom/src/rxjs'
+import { DOMSource, makeDOMDriver } from '@cycle/dom/lib/cjs/rxjs'
+import { VNode } from '@cycle/dom'
+
 
 document.body.innerHTML = "<div id='app'>hello world</div>"
 
-type Sources = {
+type mainFunction = (sources: {
   DOM: DOMSource
+}) => {
+  DOM: Observable<VNode>
 }
 
-type SelfEvent = Event & {
+type CheckBoxEvent = Event & {
   target: HTMLElement & {
-    checked: Boolean
+    checked?: Boolean
   }
 }
 
-function main(sources: Sources) {
+const main: mainFunction = (sources) => {
   const sinks = {
     DOM: sources.DOM.select('input').events('change').pipe(
-      map((ev: SelfEvent) => ev.target.checked),
+      map((ev: CheckBoxEvent) => ev.target.checked),
       startWith(false),
       map(toggled =>
         <div>
@@ -32,7 +36,7 @@ function main(sources: Sources) {
 }
 
 const drivers = {
-  DOM: makeDOMDriver('#app') as any
+  DOM: makeDOMDriver('#app')
 }
 
 run(main, drivers)
