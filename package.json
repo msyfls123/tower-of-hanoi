@@ -22,6 +22,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@cycle/dom": "^22.3.0",
+    "@cycle/history": "^7.1.0",
     "@cycle/run": "^5.2.0",
     "@cycle/rxjs-run": "^10.2.0",
     "babel-loader": "^8.0.5",
