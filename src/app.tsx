@@ -3,7 +3,7 @@ import { map, startWith } from 'rxjs/operators'
 import { run } from '@cycle/rxjs-run'
 import { DOMSource, makeDOMDriver } from '@cycle/dom/lib/cjs/rxjs'
 import { VNode } from '@cycle/dom'
-import { makeHashHistoryDriver  } from '@cycle/history'
+import { Location, makeHashHistoryDriver  } from '@cycle/history'
 
 
 document.body.innerHTML = "<div id='app'>hello world</div>"
@@ -66,7 +66,7 @@ const main: mainFunction = (sources) => {
 
 const drivers = {
   DOM: makeDOMDriver('#app'),
-  history: makeHashHistoryDriver() as any,
+  history: makeHashHistoryDriver(),
 }
 
 run(main, drivers)
