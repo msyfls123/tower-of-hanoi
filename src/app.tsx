@@ -3,10 +3,9 @@ import { map, startWith, tap, distinctUntilChanged, take, skip } from 'rxjs/oper
 import { run } from '@cycle/rxjs-run'
 import { DOMSource, makeDOMDriver } from '@cycle/dom/lib/cjs/rxjs'
 import { VNode } from '@cycle/dom'
-import { Location, makeHashHistoryDriver  } from '@cycle/history'
+import { Location, makeHashHistoryDriver } from '@cycle/history'
 
-
-document.body.innerHTML = "<div id='app'>hello world</div>"
+import './styles/index.styl'
 
 type mainFunction = (sources: {
   DOM: DOMSource
@@ -41,13 +40,10 @@ const main: mainFunction = (sources) => {
         <div>
           <nav>
             { ['/', '/about', '/help'].map((path) => (
-              <a href={path} style={{
-                color: path === location.pathname ? 'blue' : 'gray',
-                padding: '5px',
-                margin: '5px',
-                borderRadius: '2px',
-                background: '#f0f0f0'
-              }}>
+              <a class={{
+                active: location.pathname === path,
+                link: true
+              }} href={path}>
                 {path}
               </a>
             ))}

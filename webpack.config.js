@@ -5,11 +5,11 @@ const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
-  entry: [
-    path.join(__dirname, 'src', 'app')
-  ],
+  entry: {
+    'app': path.join(__dirname, 'src', 'app')
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
@@ -28,18 +28,39 @@ module.exports = {
         },
         { loader: 'ts-loader' },
       ]
+    }, {
+      test: /.styl$/,
+      use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader' },
+        { loader: 'stylus-loader' },
+      ]
     }]
   },
   resolve: {
     extensions: ['.json', '.js', '.ts', '.tsx', '.css']
   },
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'Cycle.js is awesome!',
+      template: path.join(__dirname, './src/tmpl/index.html'),
+    }),
     new webpack.ProvidePlugin({
       // https://godbasin.github.io/2017/09/03/cyclejs-notes-3-use-typescript/
       'SnabbdomCreateElement': ['snabbdom-pragma', 'createElement']
     })
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   devtool: 'source-map',
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
