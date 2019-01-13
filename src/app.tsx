@@ -1,5 +1,5 @@
-import { Observable, combineLatest } from 'rxjs'
-import { map, startWith } from 'rxjs/operators'
+import { Observable, combineLatest, concat } from 'rxjs'
+import { map, startWith, tap, distinctUntilChanged, take, skip } from 'rxjs/operators'
 import { run } from '@cycle/rxjs-run'
 import { DOMSource, makeDOMDriver } from '@cycle/dom/lib/cjs/rxjs'
 import { VNode } from '@cycle/dom'
@@ -31,6 +31,10 @@ const main: mainFunction = (sources) => {
     map((ev: CheckBoxEvent) => ev.target.checked),
     startWith(false)
   )
+  const link$ = sources.DOM.select('nav a').events('click').pipe(
+    tap((e: Event) => e.preventDefault()),
+    map((e: Event) => (e.target as AnchorHTMLElement).pathname)
+  )
   const sinks = {
     DOM: combineLatest(sources.history, toggle$).pipe(
       map(([location, toggled]) =>
@@ -54,11 +58,15 @@ const main: mainFunction = (sources) => {
         </div>
       )
     ),
-    history: sources.DOM.select('nav a').events('click').pipe(
-      map((e) => {
-        e.preventDefault()
-        return (e.target as AnchorHTMLElement).pathname
-      })
+    history: concat(
+      sources.history.pipe(
+        map(location => location.pathname),
+        take(1),
+      ),
+      link$,
+    ).pipe(
+      distinctUntilChanged(),
+      skip(1),
     )
   }
   return sinks
