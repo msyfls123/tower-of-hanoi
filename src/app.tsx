@@ -25,14 +25,14 @@ type mainFunction = (sources: {
 }
 
 const main: mainFunction = (sources) => {
-  const { DOM: navDOM$, location: navLocation$ } = Nav({
+  const { DOM: navDOM$, history: navHistory$ } = Nav({
     history: sources.history,
     DOM: sources.DOM
   })
   const { DOM: toggleDOM$ } = Toggle({
     DOM: sources.DOM
   })
-  const { DOM: githubDOM$, fetch: githubFetch$ } = Github({
+  const { DOM: githubDOM$, HTTP: githubHTTP$ } = Github({
     DOM: sources.DOM,
     HTTP: sources.HTTP
   })
@@ -47,14 +47,14 @@ const main: mainFunction = (sources) => {
       map(([navDOM, toggleDOM, githubDOM, location]) =>
         <div>
           {navDOM}
-          {toggleDOM}
           {githubDOM}
+          {toggleDOM}
           <p>I'm in {location.pathname}</p>
         </div>
       )
     ),
-    history: navLocation$,
-    HTTP: githubFetch$,
+    history: navHistory$,
+    HTTP: githubHTTP$,
   }
   return sinks
 }

@@ -3,3 +3,4 @@ dist/
 
 package-lock.json
 src/access-token.ts
+**/.DS_Store

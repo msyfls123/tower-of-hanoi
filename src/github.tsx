@@ -14,7 +14,7 @@ export default function main(sources: {
   DOM: DOMSource
   HTTP: HTTPSource
 }) {
-  const githubFetch$ = sources.DOM.select('#user-form').events('submit').pipe(
+  const HTTP = sources.DOM.select('#user-form').events('submit').pipe(
     tap((e: Event) => e.preventDefault()),
     map((e: Event): string => (e.target as HTMLFormElement).user.value),
     filter(user => !!user),
@@ -48,7 +48,7 @@ export default function main(sources: {
     ))
   )
   return {
-    fetch: githubFetch$,
+    HTTP,
     DOM,
   }
 }

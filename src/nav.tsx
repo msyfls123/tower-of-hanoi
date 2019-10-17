@@ -30,7 +30,7 @@ export default function main(
   
   return {
     DOM,
-    location: sources.history.pipe(
+    history: sources.history.pipe(
       map(location => location.pathname),
       take(1),
       concat(nav$),
